@@ -1,0 +1,32 @@
+
+cznet\xyfstanc
+#Download and install Heartbeat
+
+curl -L -O https://artifacts.elastic.co/downloads/beats/heartbeat/heartbeat-7.9.2-x86_64.rpm
+sudo rpm -vi heartbeat-7.9.2-x86_64.rpm
+
+
+#Modify /etc/heartbeat/heartbeat.yml to set the connection information:
+
+output.elasticsearch:
+  hosts: ["<es_url>"]
+  username: "elastic"
+  password: "<password>"
+setup.kibana:
+  host: "<kibana_url>"
+
+
+#Edit the configuration - Add monitors
+
+#Edit the heartbeat.monitors setting in the heartbeat.yml file.
+
+heartbeat.monitors:
+- type: http
+  urls: ["<http://localhost:9200>"]
+  schedule: "@every 10s"
+
+# Where <http://localhost:9200> is your monitored URL
+# Start Heartbeat
+
+sudo heartbeat setup
+sudo service heartbeat-elastic start
